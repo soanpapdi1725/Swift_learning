@@ -138,3 +138,4 @@ print("reverse of loop using stride")
 for n in stride (from: 10, to: 0, by:-1){
   print(n)
 }
+
