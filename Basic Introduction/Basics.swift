@@ -139,3 +139,10 @@ for n in stride (from: 10, to: 0, by:-1){
   print(n)
 }
 
+// Shorthand operators for increment and decrement 
+
+// i++ or i-- not works
+
+// i += 1 or i -=1 works 
+
+// i = i + 1 or i = i - 1 works 

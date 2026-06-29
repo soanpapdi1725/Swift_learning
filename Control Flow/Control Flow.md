@@ -1,7 +1,7 @@
 # 🔀 Control Flow in Swift
 
-> Making decisions and directing your program's execution path.
-> This guide covers `if/else`, `switch` statements, and type checking — all from your code in this module.
+> Making decisions, directing execution, and controlling loops.
+> This guide covers `if/else`, `switch` (ranges, tuples, `where`, `fallthrough`), `guard`, `while`, `repeat-while`, `break`, `continue`, labeled statements, `where` in loops, and `defer` — all from your code in this module.
 
 ---
 
@@ -9,7 +9,7 @@
 
 | File | What It Covers |
 |------|---------------|
-| [ControlFlow.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Control%20Flow/ControlFlow.swift) | `if/else if/else`, `switch` with ranges and `where` clauses, type checking with `is` and `if let` |
+| [ControlFlow.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Control%20Flow/ControlFlow.swift) | All control flow topics below |
 
 ---
 
@@ -63,8 +63,6 @@ Swift is **type-safe**, which means you often need to check or convert types exp
 
 ### 🔸 `is` Keyword — Check the Type
 
-The `is` keyword checks whether a value is of a certain type. Returns `Bool`.
-
 ```swift
 var val = "String"
 
@@ -82,15 +80,12 @@ var num = "42"
 print(type(of: num))    // → String
 ```
 
-> 💡 Useful for debugging — when you're not sure what type a variable is, `type(of:)` tells you.
-
 ### 🔸 `if let` — Safe Type Casting (Optional Binding)
 
 When you want to **convert** a value from one type to another (e.g., `String` → `Int`), the conversion might fail. Use `if let` to handle both cases safely.
 
 ```swift
 var num = "42"
-
 if let numInt = Int(num) {
     print("Typecasted to Num")       // ✅ Runs — "42" converts to 42
 } else {
@@ -98,7 +93,6 @@ if let numInt = Int(num) {
 }
 
 num = "Hello"
-
 if let numInt = Int(num) {
     print("Typecasted to Num")
 } else {
@@ -106,12 +100,10 @@ if let numInt = Int(num) {
 }
 ```
 
-> 💡 **How `if let` works here:**
+> 💡 **How `if let` works:**
 > 1. `Int(num)` tries to convert the string to an `Int`
 > 2. If it succeeds → the value is stored in `numInt` and the `if` block runs
 > 3. If it fails → `numInt` is `nil` and the `else` block runs
-> 
-> This is called **Optional Binding** — one of Swift's most important patterns!
 
 ### 🔑 Type Checking Summary
 
@@ -126,7 +118,7 @@ if let numInt = Int(num) {
 
 ## 3️⃣ `switch` Statements
 
-Swift's `switch` is **far more powerful** than in most languages. It supports ranges, pattern matching, and `where` clauses.
+Swift's `switch` is **far more powerful** than in most languages. It supports ranges, tuples, `where` clauses, value binding, and `fallthrough`.
 
 ### 🔸 Key Differences from Other Languages
 
@@ -135,12 +127,10 @@ Swift's `switch` is **far more powerful** than in most languages. It supports ra
 | Fall-through | ❌ No (by default) | ✅ Yes (needs `break`) |
 | Must be exhaustive | ✅ Yes (needs `default`) | ❌ No |
 | Supports ranges | ✅ Yes (`0..<10`) | ❌ No |
+| Supports tuples | ✅ Yes | ❌ No |
 | Supports `where` clauses | ✅ Yes | ❌ No |
-| Multiple values per case | ✅ Yes (`case 1, 2, 3:`) | ❌ No |
 
 ### 🔹 Switch with Ranges
-
-When you have defined boundaries, use ranges directly in `case`:
 
 ```swift
 var temp = Int.random(in: 0...51)
@@ -159,11 +149,9 @@ default:
 }
 ```
 
-> 💡 Each `case` uses **half-open range** (`..<`) so there's no overlap between cases. `0..<10` means 0–9, `10..<20` means 10–19, etc.
-
 ### 🔸 Switch with `where` Clauses
 
-When you don't have clean ranges or need custom conditions, use `case let` with `where`:
+When you don't have clean ranges or need custom conditions:
 
 ```swift
 switch temp {
@@ -180,12 +168,76 @@ default:
 }
 ```
 
-> 💡 **How `case let x where` works:**
-> 1. `case let x` → binds the matched value to a variable `x`
-> 2. `where x < 10` → adds a condition that must be true for this case to match
-> 3. Think of it as: *"match this case **where** the condition is true"*
+> 💡 `case let x` binds the value to `x`, then `where x < 10` adds a condition.
 
-### 🔹 How Swift Evaluates `switch`
+### 🔹 Switch with Tuples — Pattern Matching
+
+Match **multiple values at once** using tuples. Your quadrant example is a perfect use case:
+
+```swift
+let quadrantValues = (Int.random(in: -1...1), Int.random(in: -1...1))
+
+switch quadrantValues {
+case (1, 1):
+    print("Quadrant I")
+case (-1, 1):
+    print("Quadrant II")
+case (-1, -1):
+    print("Quadrant III")
+case (1, -1):
+    print("Quadrant IV")
+case (0, 1):
+    print("on Y axis")
+case (1, 0):
+    print("on X axis")
+case (0, -1):
+    print("on -Y axis")
+case (-1, 0):
+    print("on -X axis")
+default:
+    print("Origin")
+}
+```
+
+> 💡 **Tuples in switch** let you match combinations of values — super useful for coordinate systems, state machines, etc.
+
+### 🔸 `fallthrough` — Force Execution of the Next Case
+
+By default, Swift **does NOT** fall through to the next case. Use `fallthrough` when you explicitly want it:
+
+```swift
+let dayNumber = Int.random(in: 1...7)
+
+switch dayNumber {
+case 1:
+    print("Weekday")
+    fallthrough
+case 2:
+    print("Weekday")
+    fallthrough
+case 3:
+    print("Weekday")
+    fallthrough
+case 4:
+    print("Weekday")
+    fallthrough
+case 5:
+    print("Weekday")
+case 6:
+    print("Weekend")
+    fallthrough
+case 7:
+    print("Weekend")
+default:
+    print("Not a weekday")
+}
+```
+
+> 💡 When `fallthrough` is used, the **next case executes regardless of its condition**. If `dayNumber` is 1, it prints "Weekday" five times because it falls through cases 1→2→3→4→5.
+
+> ⚠️ `fallthrough` does **not** check the next case's condition — it blindly falls through. Use with caution!
+
+### 🔑 How Swift Evaluates `switch`
 
 ```
 ┌──────────────┐
@@ -193,66 +245,19 @@ default:
 └──────┬───────┘
        │
        ▼
-  case 0..<10?  ─── NO ──▶ case 10..<20?  ─── NO ──▶ case 20..<30?  ─── YES!
-                                                           │
-                                                           ▼
-                                                    print("Normal")
-                                                    ✅ STOPS HERE
-                                                    (no fall-through)
-```
-
-### 🔑 Key Points About `switch`
-
-- **Must be exhaustive** — every possible value must be covered. Use `default:` as a catch-all.
-- **No fall-through** — once a case matches, Swift exits the switch. No need for `break`.
-- **If you WANT fall-through** — use the `fallthrough` keyword (rare).
-- **Each case must have at least one statement** — use `break` for empty cases.
-
----
-
-## 📋 Quick Reference Cheat Sheet
-
-### If / Else
-```swift
-if condition {
-    // ...
-} else if otherCondition {
-    // ...
-} else {
-    // ...
-}
-```
-
-### Type Checking
-```swift
-val is Int                         // Check type → Bool
-type(of: val)                      // Get type
-if let n = Int("42") { print(n) }  // Safe conversion
-```
-
-### Switch with Ranges
-```swift
-switch value {
-case 0..<10:   print("Low")
-case 10..<20:  print("Medium")
-default:       print("High")
-}
-```
-
-### Switch with `where`
-```swift
-switch value {
-case let x where x < 0:   print("Negative")
-case let x where x == 0:  print("Zero")
-default:                   print("Positive")
-}
+  case 0..<10?  ─ NO ─▶ case 10..<20?  ─ NO ─▶ case 20..<30?  ─ YES!
+                                                      │
+                                                      ▼
+                                               print("Normal")
+                                               ✅ STOPS HERE
+                                               (no fall-through)
 ```
 
 ---
 
 ## 4️⃣ `guard` Statement
 
-`guard` is Swift's **early exit** pattern. It checks a condition — if the condition is **false**, you must exit the current scope (`return`, `break`, `continue`, or `throw`).
+`guard` is Swift's **early exit** pattern. It checks a condition — if the condition is **false**, you must exit the current scope.
 
 ### 🔸 `guard let` — Safe Unwrapping with Early Exit
 
@@ -265,12 +270,9 @@ func printSqr(numInStr: String) {
     // If we reach here, `n` is guaranteed to be a valid Int ✅
     print(n * n)
 }
-
-printSqr(numInStr: "8")      // → 64
-printSqr(numInStr: "Hello")  // → "Failed to convert..."
 ```
 
-### 🔹 `guard` vs `if let` — When to Use Each
+### 🔹 `guard` vs `if let`
 
 | Feature | `if let` | `guard let` |
 |---------|----------|-------------|
@@ -285,11 +287,11 @@ printSqr(numInStr: "Hello")  // → "Failed to convert..."
 
 ## 5️⃣ `while` & `repeat-while` Loops
 
-Use these when you **don't know** how many times you need to loop. Unlike `for-in` which iterates a known range/collection, `while` loops continue until a condition becomes false.
+Use these when you **don't know** how many times you need to loop.
 
 ### 🔸 `while` Loop — Check First, Then Run
 
-The condition is checked **before** each iteration. If the condition is false from the start, the body **never runs**.
+The condition is checked **before** each iteration. If false from the start, the body **never runs**.
 
 ```swift
 var i = 0
@@ -301,11 +303,9 @@ while i <= 10 {
 // Prints: 0, 1, 2, 3, ... 10
 ```
 
-> 💡 Think of it as: *"WHILE this is true, keep going."*
-
 ### 🔹 `repeat-while` Loop — Run First, Then Check
 
-The body runs **at least once**, then the condition is checked. This is Swift's version of `do-while` from other languages.
+The body runs **at least once**, then the condition is checked.
 
 ```swift
 var j = 10
@@ -317,24 +317,153 @@ repeat {
 // Prints: 10 (runs once even though j=10 is NOT < 0)
 ```
 
-> 💡 The loop body executes **at least once** — even if the condition is false from the start! That's the key difference from `while`.
+### 🔸 Comparison Table
 
-### 🔸 `while` vs `repeat-while` Comparison
+| Feature | `while` | `repeat-while` | `for-in` |
+|---------|---------|----------------|----------|
+| Checks condition | **Before** each run | **After** each run | N/A (iterates collection/range) |
+| Minimum runs | 0 | 1 | Depends on collection |
+| Use when | Unknown iterations, might not run | Unknown iterations, must run at least once | Known range or collection |
+| Other languages | `while` | `do-while` | `for...of` / `foreach` |
 
-| Feature | `while` | `repeat-while` |
-|---------|---------|----------------|
-| Checks condition | **Before** each iteration | **After** each iteration |
-| Minimum executions | 0 (might never run) | 1 (always runs at least once) |
-| Equivalent in other languages | `while` | `do-while` |
-| Use when | You might not need to run at all | You need to run at least once |
+---
 
-### 🔹 `while` vs `for-in` — When to Use Which
+## 6️⃣ `where` Clause in Loops
 
-| Use | When |
-|-----|------|
-| `for-in` | You know the range or collection to iterate |
-| `while` | You don't know how many iterations — looping until a condition is met |
-| `repeat-while` | Same as `while`, but must run at least once |
+Add a **filter condition** directly to a `for` loop using `where`:
+
+```swift
+for i in 1...100 where i % 2 == 0 {
+    print("Even Number:", i)
+}
+// Prints: 2, 4, 6, 8, ... 100
+```
+
+> 💡 `where` acts as a **built-in filter** — only iterations that satisfy the condition execute the loop body. Cleaner than putting `if` inside the loop!
+
+---
+
+## 7️⃣ `break` & `continue` with Labeled Statements
+
+### 🔸 The Problem with Nested Loops
+
+In nested loops, `break` and `continue` only affect the **innermost** loop by default. To control an **outer** loop, use **labels**.
+
+### 🔹 `break` with Label — Exit Outer Loop
+
+```swift
+outer: for i in 1...3 {
+    for j in 1...3 {
+        if i == 2 && j == 2 {
+            print("found (\(i), \(j))")
+            break outer    // ← Exits BOTH loops
+        }
+        print("\(i) \(j)")
+    }
+}
+```
+
+**Output:**
+```
+1 1
+1 2
+1 3
+2 1
+found (2, 2)          ← Stops completely here
+```
+
+> 💡 Without `outer`, only the inner loop would break, and the outer loop would continue with `i = 3`.
+
+### 🔸 `continue` with Label — Skip to Next Outer Iteration
+
+```swift
+outer: for i in 1...3 {
+    for j in 1...3 {
+        if i == 2 && j == 2 {
+            continue outer    // ← Skips rest of OUTER iteration
+        }
+        print("\(i) \(j)")
+    }
+    print("i", i)
+}
+```
+
+**Output:**
+```
+1 1
+1 2
+1 3
+i 1
+2 1                   ← When j==2, skips to i=3
+3 1
+3 2
+3 3
+i 3
+```
+
+> 💡 Notice `i 2` and `2 2`, `2 3` are all missing — `continue outer` jumped directly to the next value of `i`.
+
+### 🔑 Label Summary
+
+| Statement | Without Label | With Label (`outer:`) |
+|-----------|--------------|----------------------|
+| `break` | Exits **inner** loop only | Exits **outer** loop (and inner) |
+| `continue` | Skips to next **inner** iteration | Skips to next **outer** iteration |
+
+---
+
+## 8️⃣ `defer` — Execute Code on Scope Exit
+
+`defer` schedules code to run **when the current scope exits** — regardless of how it exits (normal return, error, etc.).
+
+### 🔸 Basic Behavior
+
+```swift
+func demonstrateDefer() {
+    defer { print("This will be lastly executed") }
+    defer { print("This will be 3rd executed") }
+    defer { print("This will be 2nd executed") }
+    print("first executed")
+}
+```
+
+**Output:**
+```
+first executed
+This will be 2nd executed
+This will be 3rd executed
+This will be lastly executed
+```
+
+### 🔹 Key Rules of `defer`
+
+| Rule | Explanation |
+|------|-------------|
+| **Executes on scope exit** | Runs when the function/block ends, not when declared |
+| **LIFO order (stack)** | Multiple defers run in **reverse order** — last declared runs first |
+| **Non-deferred code runs first** | All normal statements execute before any `defer` blocks |
+| **Guaranteed execution** | Runs even if the function exits early via `return` or an error |
+
+> 💡 **Think of `defer` like a stack of sticky notes:**
+> - Each `defer` adds a note to the stack
+> - When the function ends, Swift peels them off **top to bottom** (LIFO — Last In, First Out)
+> - The last `defer` written runs first
+
+### 🔸 When to Use `defer`
+
+- **Cleanup code** — close files, release resources, stop timers
+- **Paired operations** — if you open something, `defer` the close immediately
+- **Logging** — track when a function exits regardless of the exit path
+
+```swift
+func readFile() {
+    let file = openFile()
+    defer { closeFile(file) }    // ← Guaranteed to close!
+    
+    // ... do work with file ...
+    // Even if this throws an error, file gets closed
+}
+```
 
 ---
 
@@ -342,13 +471,7 @@ repeat {
 
 ### If / Else
 ```swift
-if condition {
-    // ...
-} else if otherCondition {
-    // ...
-} else {
-    // ...
-}
+if condition { } else if other { } else { }
 ```
 
 ### Type Checking
@@ -358,65 +481,81 @@ type(of: val)                      // Get type
 if let n = Int("42") { print(n) }  // Safe conversion
 ```
 
-### Switch with Ranges
+### Switch
 ```swift
+// Ranges
 switch value {
-case 0..<10:   print("Low")
-case 10..<20:  print("Medium")
-default:       print("High")
+case 0..<10:  print("Low")
+case 10..<20: print("Med")
+default:      print("High")
 }
-```
 
-### Switch with `where`
-```swift
+// Tuples
+switch (x, y) {
+case (0, 0):  print("Origin")
+case (_, 0):  print("On X axis")
+default:      print("Somewhere")
+}
+
+// Where
 switch value {
-case let x where x < 0:   print("Negative")
-case let x where x == 0:  print("Zero")
-default:                   print("Positive")
+case let x where x < 0: print("Negative")
+default:                 print("Non-negative")
 }
 ```
 
 ### Guard
 ```swift
-guard let n = Int(str) else {
-    print("Failed")
-    return
-}
-// n is safe to use here
+guard let n = Int(str) else { return }
 ```
 
 ### While & Repeat-While
 ```swift
-while condition {
-    // runs 0 or more times
-}
+while condition { }
+repeat { } while condition
+```
 
-repeat {
-    // runs 1 or more times
-} while condition
+### Where in Loops
+```swift
+for i in 1...100 where i % 2 == 0 { }
+```
+
+### Labeled Statements
+```swift
+outer: for i in 1...3 {
+    for j in 1...3 {
+        if condition { break outer }
+        if condition { continue outer }
+    }
+}
+```
+
+### Defer
+```swift
+defer { print("Runs last") }       // LIFO order
 ```
 
 ---
 
 ## ✅ What You've Learned in This Module
 
-- [x] `if` / `else if` / `else` — basic conditional branching
-- [x] Type checking with `is` keyword
-- [x] `type(of:)` to inspect types at runtime
-- [x] `if let` for safe type casting (Optional Binding)
-- [x] `switch` with ranges (`0..<10`)
-- [x] `switch` with `where` clauses and value binding (`case let x where`)
-- [x] Swift's `switch` is exhaustive and has no fall-through
+- [x] `if` / `else if` / `else` — conditional branching
+- [x] Type checking — `is`, `type(of:)`, `if let` for safe casting
+- [x] `switch` with ranges — `0..<10`
+- [x] `switch` with `where` clauses — `case let x where`
+- [x] `switch` with tuples — matching `(x, y)` coordinate pairs
+- [x] `fallthrough` — forcing execution of the next case
 - [x] `guard let` — early exit with safe unwrapping
 - [x] `while` loop — condition checked before each iteration
-- [x] `repeat-while` loop — runs at least once, condition checked after
+- [x] `repeat-while` loop — runs at least once
+- [x] `where` in loops — inline filtering
+- [x] `break` and `continue` with labeled statements (`outer:`)
+- [x] `defer` — LIFO execution on scope exit
 
 ## 🔜 What's Coming Next
 
-- [ ] `switch` with tuples — matching multiple values at once
-- [ ] `switch` with enums — the most natural pairing
-- [ ] `break`, `continue`, `fallthrough` — loop/switch control keywords
-- [ ] Labeled statements — controlling nested loops
+- [ ] `switch` with enums — the most natural pairing (you started this in Functions!)
+- [ ] `#available` — checking OS version at runtime
 
 ---
 

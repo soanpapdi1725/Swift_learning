@@ -199,6 +199,23 @@ print(age > 18 ? "Age greater than 18" : "Age less than 18")
 
 > 💡 Read it like: **"Is age > 18? If yes → first value. If no → second value."**
 
+### 🔸 Compound Assignment Operators
+
+Shorthand for modifying a variable's value:
+
+| Operator | Equivalent To | Example |
+|----------|--------------|---------|
+| `+=` | `a = a + n` | `a += 1` |
+| `-=` | `a = a - n` | `a -= 1` |
+| `*=` | `a = a * n` | `a *= 2` |
+| `/=` | `a = a / n` | `a /= 2` |
+| `%=` | `a = a % n` | `a %= 3` |
+
+> ⚠️ **Swift does NOT have `++` or `--` operators!** They were removed in Swift 3.
+> - ❌ `i++` → **Error!**
+> - ✅ `i += 1` → **Use this instead**
+> - ✅ `i = i + 1` → **Also works**
+
 ---
 
 ## 5️⃣ Strings
@@ -449,21 +466,26 @@ for i in (1...10).reversed() { }                // 10 to 1
 - [x] All 6 basic data types — `String`, `Character`, `Int`, `Bool`, `Double`, `Float`
 - [x] Type Inference vs Type Annotation
 - [x] Arithmetic, Logical, Relational, and Ternary operators
+- [x] Compound assignment operators (`+=`, `-=`, etc.) — `i++` doesn't exist in Swift!
 - [x] Strings — creation, interpolation, and 14+ string methods
 - [x] For loops — closed range, half-open range, stride
 - [x] Looping over arrays and dictionaries
 - [x] Reversing loops
 
+## ✅ You've Since Completed (in other modules)
+
+- [x] `while` and `repeat-while` loops → [Control Flow](file:///d:/Workspace/Desktop/Learning%20Swift/Control%20Flow/Control%20Flow.md)
+- [x] `if` / `else if` / `else` → [Control Flow](file:///d:/Workspace/Desktop/Learning%20Swift/Control%20Flow/Control%20Flow.md)
+- [x] `switch` statements (ranges, tuples, `where`, `fallthrough`) → [Control Flow](file:///d:/Workspace/Desktop/Learning%20Swift/Control%20Flow/Control%20Flow.md)
+- [x] `guard` statements → [Control Flow](file:///d:/Workspace/Desktop/Learning%20Swift/Control%20Flow/Control%20Flow.md)
+- [x] Functions, closures, enums → [Functions](file:///d:/Workspace/Desktop/Learning%20Swift/Functions/Functions.md)
+
 ## 🔜 What's Coming Next
 
-- [ ] `while` and `repeat-while` loops
-- [ ] `if` / `else if` / `else` conditionals
-- [ ] `switch` statements and pattern matching
-- [ ] `guard` statements
-- [ ] Optionals (`?`, `!`, `if let`, `guard let`, `??`)
-- [ ] Functions (`func`)
-- [ ] Closures
+- [ ] Optionals deep dive (`?`, `??`, `?.`)
+- [ ] Structs & Classes → [Objects](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Objects.md)
 
 ---
 
 > 💬 *"The basics are the foundation. Master them, and everything else becomes easier."*
+
