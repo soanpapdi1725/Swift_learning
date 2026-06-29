@@ -71,3 +71,31 @@ case let x where x < 40:
 default:
   print("very Hot", temp)
 }
+
+// guard check and Early access
+func  printSqr(numInStr: String){
+    guard let n = Int(numInStr) else {
+        print("Failed to convert String to number make sure to pass number only")
+        return;
+    }
+    print(n*n);
+}
+
+
+
+// while -> use when you don't know the number of iterations
+var i = 0
+
+while i<=10{
+  print("Iterator i:", i)
+  i = i + 1
+}
+
+var j = 10
+
+
+// runs atleast ones -> use when you don't know the number of iterations
+repeat{
+  print("iterator: ", j);
+  j = j+1
+}while i < 0

@@ -26,5 +26,3 @@ var mySet: Set<Int> = [5,2,6,2,6,5,0,0,2]
 
 print("Printing set means No Repeatition of duplicate values: ", mySet) //output [5,6,0,2]
 print("contains returns bool",mySet.contains(5))
-
-// in md add properties and methods  of sets and dict for later after that delete this line

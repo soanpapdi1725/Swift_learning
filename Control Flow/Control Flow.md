@@ -250,6 +250,154 @@ default:                   print("Positive")
 
 ---
 
+## 4️⃣ `guard` Statement
+
+`guard` is Swift's **early exit** pattern. It checks a condition — if the condition is **false**, you must exit the current scope (`return`, `break`, `continue`, or `throw`).
+
+### 🔸 `guard let` — Safe Unwrapping with Early Exit
+
+```swift
+func printSqr(numInStr: String) {
+    guard let n = Int(numInStr) else {
+        print("Failed to convert String to number")
+        return    // ← MUST exit if conversion fails
+    }
+    // If we reach here, `n` is guaranteed to be a valid Int ✅
+    print(n * n)
+}
+
+printSqr(numInStr: "8")      // → 64
+printSqr(numInStr: "Hello")  // → "Failed to convert..."
+```
+
+### 🔹 `guard` vs `if let` — When to Use Each
+
+| Feature | `if let` | `guard let` |
+|---------|----------|-------------|
+| Where the value lives | Inside the `if` block only | Available **after** the guard (rest of function) |
+| What's in the block | The **success** code | The **failure** code |
+| Must exit in block? | ❌ No | ✅ Yes — must `return`, `break`, `continue`, or `throw` |
+| Best for | Short operations with the unwrapped value | Functions where you need the value for the rest of the code |
+
+> 💡 **Rule of thumb:** Use `guard` when you need the unwrapped value for the **rest of the function**. Use `if let` when you only need it **briefly**.
+
+---
+
+## 5️⃣ `while` & `repeat-while` Loops
+
+Use these when you **don't know** how many times you need to loop. Unlike `for-in` which iterates a known range/collection, `while` loops continue until a condition becomes false.
+
+### 🔸 `while` Loop — Check First, Then Run
+
+The condition is checked **before** each iteration. If the condition is false from the start, the body **never runs**.
+
+```swift
+var i = 0
+
+while i <= 10 {
+    print("Iterator i:", i)
+    i = i + 1
+}
+// Prints: 0, 1, 2, 3, ... 10
+```
+
+> 💡 Think of it as: *"WHILE this is true, keep going."*
+
+### 🔹 `repeat-while` Loop — Run First, Then Check
+
+The body runs **at least once**, then the condition is checked. This is Swift's version of `do-while` from other languages.
+
+```swift
+var j = 10
+
+repeat {
+    print("iterator:", j)
+    j = j + 1
+} while j < 0
+// Prints: 10 (runs once even though j=10 is NOT < 0)
+```
+
+> 💡 The loop body executes **at least once** — even if the condition is false from the start! That's the key difference from `while`.
+
+### 🔸 `while` vs `repeat-while` Comparison
+
+| Feature | `while` | `repeat-while` |
+|---------|---------|----------------|
+| Checks condition | **Before** each iteration | **After** each iteration |
+| Minimum executions | 0 (might never run) | 1 (always runs at least once) |
+| Equivalent in other languages | `while` | `do-while` |
+| Use when | You might not need to run at all | You need to run at least once |
+
+### 🔹 `while` vs `for-in` — When to Use Which
+
+| Use | When |
+|-----|------|
+| `for-in` | You know the range or collection to iterate |
+| `while` | You don't know how many iterations — looping until a condition is met |
+| `repeat-while` | Same as `while`, but must run at least once |
+
+---
+
+## 📋 Quick Reference Cheat Sheet
+
+### If / Else
+```swift
+if condition {
+    // ...
+} else if otherCondition {
+    // ...
+} else {
+    // ...
+}
+```
+
+### Type Checking
+```swift
+val is Int                         // Check type → Bool
+type(of: val)                      // Get type
+if let n = Int("42") { print(n) }  // Safe conversion
+```
+
+### Switch with Ranges
+```swift
+switch value {
+case 0..<10:   print("Low")
+case 10..<20:  print("Medium")
+default:       print("High")
+}
+```
+
+### Switch with `where`
+```swift
+switch value {
+case let x where x < 0:   print("Negative")
+case let x where x == 0:  print("Zero")
+default:                   print("Positive")
+}
+```
+
+### Guard
+```swift
+guard let n = Int(str) else {
+    print("Failed")
+    return
+}
+// n is safe to use here
+```
+
+### While & Repeat-While
+```swift
+while condition {
+    // runs 0 or more times
+}
+
+repeat {
+    // runs 1 or more times
+} while condition
+```
+
+---
+
 ## ✅ What You've Learned in This Module
 
 - [x] `if` / `else if` / `else` — basic conditional branching
@@ -259,13 +407,16 @@ default:                   print("Positive")
 - [x] `switch` with ranges (`0..<10`)
 - [x] `switch` with `where` clauses and value binding (`case let x where`)
 - [x] Swift's `switch` is exhaustive and has no fall-through
+- [x] `guard let` — early exit with safe unwrapping
+- [x] `while` loop — condition checked before each iteration
+- [x] `repeat-while` loop — runs at least once, condition checked after
 
 ## 🔜 What's Coming Next
 
-- [ ] `guard` statements — early exit pattern
-- [ ] `while` and `repeat-while` loops
 - [ ] `switch` with tuples — matching multiple values at once
 - [ ] `switch` with enums — the most natural pairing
+- [ ] `break`, `continue`, `fallthrough` — loop/switch control keywords
+- [ ] Labeled statements — controlling nested loops
 
 ---
 
