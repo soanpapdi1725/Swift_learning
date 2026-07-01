@@ -139,6 +139,35 @@ for r in 0..<3{
   }
 }
 
+// Nested Struct
+
+struct House{
+  struct Room{
+    var rooms: Int
+  }
+}
+
+var rooms = House.Room(rooms: 4)
+
+print(rooms.rooms)
+
+// Extending the Struct using Extension means adding more properties to the same struct but later on
+
+struct Circle{
+  var radius: Double
+}
+
+extension Circle{
+  func areaOfCircle()-> Double{
+    return 3.14*radius*radius
+  }
+}
+
+
+let c = Circle(radius: 70)
+
+print("area of circle: ", c.areaOfCircle())
+
 
 
 
@@ -389,6 +418,26 @@ print("Increments by  5 directly: ", partyCounter.count)//7
 
 
 
+// generics -> General Methods or classes which can work with all datatypes or satisfy all datatypes
+func identity<T>(_ val: T) -> T {
+return val
+}
+
+// now T here can be any thing even our defined object also
+// if you provide it a generic type then
+
+
+// Access modifers in Class
+// 1. open -> Can be accessed from anywhere
+// 2. public -> Can be accessed from anywhere 
+// 3. internal -> Default -> Can be accessed within the same module
+// 4. fileprivate -> Can be accessed within the same file
+// 5. private -> Can be accessed within the same class
+
+print(identity<Int>(100))
+print(identity<String>("my name is sonu"))
+
 
 // We can create class Inside the Struct
 // we can also create struct inside the class
+

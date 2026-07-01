@@ -9,7 +9,7 @@
 
 | File | What It Covers |
 |------|---------------|
-| [Struct_Classes.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift) | Structs (value types, mutating, static, subscript, Matrix), Classes (reference types, init, inheritance, override, final, deinit, optional chaining, method overloading) |
+| [Struct_Classes.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift) | Structs (value types, mutating, static, subscript, Matrix, nested, extensions), Classes (reference types, init, inheritance, override, final, deinit, optional chaining, method overloading), Generics, Access Modifiers |
 | [Enums.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Enums.swift) | Enumerations — basic, raw values, associated values, methods |
 
 ---
@@ -524,7 +524,123 @@ partyCounter.Increment(count: 5)      // count → 7
 
 ---
 
-## 1️⃣4️⃣ Enumerations (Enums)
+## 1️⃣4️⃣ Nested Structs
+
+You can define a struct **inside** another struct. Access the inner type using `Outer.Inner`:
+
+```swift
+struct House {
+    struct Room {
+        var rooms: Int
+    }
+}
+
+var rooms = House.Room(rooms: 4)
+print(rooms.rooms)    // → 4
+```
+
+> 💡 Nested types keep related types organized together. The inner type is namespaced under the outer type — `House.Room` won't conflict with any other `Room` type.
+
+---
+
+## 1️⃣5️⃣ Extensions
+
+**Extensions** let you add new functionality to an existing type — even types you didn't create (like `Int`, `String`, `Array`). You can add methods, computed properties, and protocol conformances.
+
+```swift
+struct Circle {
+    var radius: Double
+}
+
+extension Circle {
+    func areaOfCircle() -> Double {
+        return 3.14 * radius * radius
+    }
+}
+
+let c = Circle(radius: 70)
+print("area of circle:", c.areaOfCircle())    // → 15386.0
+```
+
+### 🔑 Extension Rules
+
+| Can Add | Cannot Add |
+|---------|------------|
+| ✅ Instance & type methods | ❌ Stored properties |
+| ✅ Computed properties | ❌ Property observers to existing properties |
+| ✅ New initializers | ❌ Designated initializers (class only) |
+| ✅ Subscripts | ❌ Override existing methods |
+| ✅ Nested types | |
+| ✅ Protocol conformances | |
+
+> 💡 Extensions are like **attaching a new room to your house** — you can add functionality without modifying the original blueprint.
+
+---
+
+## 1️⃣6️⃣ Generics
+
+**Generics** let you write flexible, reusable functions and types that work with **any data type**. The placeholder type is conventionally named `T`.
+
+```swift
+func identity<T>(_ val: T) -> T {
+    return val
+}
+
+print(identity(100))                 // → 100 (T = Int)
+print(identity("my name is sonu"))   // → "my name is sonu" (T = String)
+```
+
+### 🔑 Generics Summary
+
+| Feature | Syntax | Example |
+|---------|--------|---------|
+| Generic function | `func f<T>(_ val: T) -> T` | `identity(42)` |
+| Generic struct | `struct Stack<Element> { }` | `Stack<Int>()` |
+| Generic class | `class Box<T> { var value: T }` | `Box<String>()` |
+| Multiple type params | `func f<T, U>(_ a: T, _ b: U)` | `f(1, "hello")` |
+| Type constraints | `func f<T: Comparable>(_ a: T)` | Only types conforming to `Comparable` |
+
+> 💡 `T` can be **anything** — even your own custom types. Generics power most of Swift's standard library (`Array<Element>`, `Dictionary<Key, Value>`, `Optional<Wrapped>`).
+
+---
+
+## 1️⃣7️⃣ Access Modifiers
+
+Access modifiers control **who can see and use** your properties and methods.
+
+| Modifier | Visibility | Use Case |
+|----------|-----------|----------|
+| `open` | Anywhere + can be subclassed/overridden from other modules | Frameworks/libraries you want others to extend |
+| `public` | Anywhere, but **cannot** be subclassed from other modules | Public API |
+| `internal` | Same **module** only (default) | Normal app code |
+| `fileprivate` | Same **file** only | Helper functions used only in one file |
+| `private` | Same **scope** (class/struct) only | Implementation details |
+
+### 🔸 Visibility from most open → most restrictive:
+
+```
+open  →  public  →  internal  →  fileprivate  →  private
+ 👁️          👁️          👁️              👁️              🔒
+```
+
+```swift
+class BankAccount {
+    public var ownerName: String           // Anyone can see
+    private var balance: Double = 0        // Only this class can see
+    fileprivate var accountId: String      // Only this file can see
+    
+    internal init(owner: String, id: String) {    // Same module
+        self.ownerName = owner
+        self.accountId = id
+    }
+}
+```
+
+> 💡 **Default is `internal`** — visible within the same module. For app development, you rarely need `open` or `public` unless building a framework.
+
+---
+
+## 1️⃣8️⃣ Enumerations (Enums)
 
 An **enum** defines a group of related values as a type. Swift's enums are **far more powerful** than in most languages.
 
@@ -690,6 +806,28 @@ obj as! Dog                // forced downcast — crashes if wrong
 type(of: obj)              // get runtime type
 ```
 
+### Nested Structs & Extensions
+```swift
+struct Outer { struct Inner { var x: Int } }  // Nested
+extension Circle { func area() -> Double { 3.14 * r * r } }  // Extension
+```
+
+### Generics
+```swift
+func identity<T>(_ val: T) -> T { return val }
+identity(42)              // T = Int
+identity("hello")         // T = String
+```
+
+### Access Modifiers
+```swift
+open class A { }           // Subclass from anywhere
+public var x = 0           // Visible anywhere
+internal var y = 0         // Same module (default)
+fileprivate var z = 0      // Same file
+private var w = 0          // Same scope
+```
+
 ### Enums
 ```swift
 enum Direction { case north, south, east, west }
@@ -706,6 +844,8 @@ enum Result { case success(data: String) }      // Associated values
 - [x] Static members — type-level properties and methods
 - [x] Subscripts — custom `[]` access with `get` and `set`
 - [x] Matrix with subscript — 2D grid stored as 1D array
+- [x] Nested structs — `Outer.Inner` namespacing
+- [x] Extensions — adding methods to existing types
 - [x] Classes — reference types, shared on assignment
 - [x] Designated init — standard initializer
 - [x] Convenience init — helper init with `self.init`
@@ -719,6 +859,8 @@ enum Result { case success(data: String) }      // Associated values
 - [x] Type casting with `as?` and `as`
 - [x] Optional chaining (`?.`) — safe property access
 - [x] Method overloading — same name, different parameters
+- [x] Generics — `func identity<T>(_ val: T) -> T`
+- [x] Access modifiers — `open`, `public`, `internal`, `fileprivate`, `private`
 - [x] Enums — basic, raw values, associated values, methods
 - [x] Structs inside classes & classes inside structs
 
@@ -727,7 +869,6 @@ enum Result { case success(data: String) }      // Associated values
 - [ ] Computed properties — `var fullName: String { return "\(first) \(last)" }`
 - [ ] Property observers — `willSet` and `didSet`
 - [ ] `lazy` properties — initialized on first access
-- [ ] Access control — `public`, `internal`, `fileprivate`, `private`
 - [ ] Protocols — contracts that types conform to
 
 ---

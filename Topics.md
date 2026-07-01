@@ -131,10 +131,10 @@
 
 | # | Topic | Status | Description |
 |---|-------|--------|-------------|
-| 53 | **Optionals (`?`)** | 🔲 | A variable that might hold a value or `nil`. Declared as `var name: String?`. Forces you to handle the nil case. |
+| 53 | **Optionals (`?`)** | ✅ | A variable that might hold a value or `nil`. Declared as `var name: String?`. Used extensively with `residence?` optional chaining. |
 | 54 | **Optional Binding (`if let` / `guard let`)** | ✅ | Safely unwrap optionals — `if let value = optional { ... }`. You've used this extensively in type casting and `guard`! |
 | 55 | **Nil-Coalescing (`??`)** | 🔲 | Provide a default value — `let name = optionalName ?? "Guest"`. |
-| 56 | **Optional Chaining (`?.`)** | 🔲 | Access properties/methods on an optional — `user?.address?.city`. Returns `nil` if any link is nil. |
+| 56 | **Optional Chaining (`?.`)** | ✅ | Access properties/methods on an optional — `john.residence?.rooms`. Returns `nil` if any link is nil. |
 | 57 | **Force Unwrapping (`!`)** | ✅ | Access the value directly — crashes if nil. You've used this with `.first!`, `.last!`, `.min()!`, `.max()!`. |
 | 58 | **Implicitly Unwrapped Optionals** | 🔲 | `var name: String!` — used when a value is guaranteed after initialization (e.g., `@IBOutlet`). |
 
@@ -146,17 +146,17 @@
 
 | # | Topic | Status | Description |
 |---|-------|--------|-------------|
-| 59 | **Structs** | ✅ | Value types — copied on assignment. Memberwise init, `mutating` methods, `static` members, subscripts. |
+| 59 | **Structs** | ✅ | Value types — copied on assignment. Memberwise init, `mutating` methods, `static` members, subscripts, nested structs. |
 | 60 | **Classes** | ✅ | Reference types — shared on assignment. `init`, `deinit`, optional chaining, method overloading. |
 | 61 | **Structs vs Classes** | ✅ | Key differences: value vs reference semantics, inheritance, deinitializers, memory (stack vs heap). |
 | 62 | **Properties (Stored & Computed)** | 🔲 | Stored: hold a value. Computed: calculate a value on the fly. Also: `lazy`, `willSet`, `didSet`. |
 | 63 | **Methods** | ✅ | Instance and type (`static`) methods. `mutating` for struct methods, method overloading in classes. |
 | 64 | **Initializers** | ✅ | Designated `init()`, `convenience init`, failable `init?`, `deinit` — all covered with examples. |
 | 65 | **Inheritance** | ✅ | `override`, `super`, `final`, type checking with `is`, type casting with `as?`. Multi-level inheritance chain. |
-| 66 | **Access Control** | 🔲 | `public`, `internal`, `fileprivate`, `private` — control what's visible to other code. |
+| 66 | **Access Control** | ✅ | `open`, `public`, `internal` (default), `fileprivate`, `private` — control visibility of properties and methods. |
 
 **📂 Your code:**
-- [Struct_Classes.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift) — Structs (value types, `mutating`, `static`, subscripts, Matrix), Classes (reference types, init, inheritance, `override`, `final`, `deinit`, optional chaining, method overloading)
+- [Struct_Classes.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift) — Structs (value types, `mutating`, `static`, subscripts, nested, extensions, Matrix), Classes (reference types, init, inheritance, `override`, `final`, `deinit`, optional chaining, method overloading), Generics, Access Modifiers
 - [Enums.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Enums.swift) — Enumerations — basic, raw values, associated values, methods
 - 📖 [Objects.md](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Objects.md) — **Complete reading guide for this level**
 
@@ -171,9 +171,13 @@
 | 67 | **Protocols** | 🔲 | Define a contract (blueprint) that types must conform to. Swift's answer to interfaces. |
 | 68 | **Protocol Extensions** | 🔲 | Add default implementations to protocols — enables "mix-in" style code sharing. |
 | 69 | **Protocol-Oriented Programming** | 🔲 | Swift's preferred paradigm. Compose behaviors through protocols instead of class hierarchies. |
-| 70 | **Generics** | 🔲 | Write type-flexible code — `func swap<T>(_ a: inout T, _ b: inout T)`. Powers most of Swift's standard library. |
+| 70 | **Generics** | ✅ | `func identity<T>(_ val: T) -> T` — write type-flexible code that works with any data type. |
 | 71 | **Associated Types** | 🔲 | Placeholder types in protocols — `associatedtype Element`. Makes protocols generic. |
 | 72 | **`some` & `any` Keywords** | 🔲 | Opaque types (`some Protocol`) and existential types (`any Protocol`) — key for SwiftUI and modern APIs. |
+
+**📂 Your code:**
+- [Struct_Classes.swift — Generics section](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift#L421-L438) — `func identity<T>` generic function
+- 📖 [Objects.md — Generics](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Objects.md) — Generics reference in Objects guide
 
 ---
 
@@ -196,11 +200,15 @@
 
 | # | Topic | Status | Description |
 |---|-------|--------|-------------|
-| 77 | **`throw` / `throws` / `rethrows`** | 🔲 | Functions that can fail are marked `throws`. Errors are Swift values conforming to the `Error` protocol. |
-| 78 | **`do-try-catch`** | 🔲 | The standard error handling pattern — `do { try riskyOp() } catch { handle(error) }`. |
-| 79 | **`try?` and `try!`** | 🔲 | `try?` converts errors to nil. `try!` asserts success (crashes on error). Choose wisely. |
-| 80 | **Custom Error Types** | 🔲 | Define your own error types with `enum MyError: Error { ... }` for descriptive, typed errors. |
+| 77 | **`throw` / `throws` / `rethrows`** | ✅ | Functions that can fail are marked `throws`. Use `throw` to throw an error. `guard let` + `throw` pattern. |
+| 78 | **`do-try-catch`** | ✅ | The standard error handling pattern — `do { try riskyOp() } catch { handle(error) }`. |
+| 79 | **`try?` and `try!`** | ✅ | `try?` converts errors to nil. `try!` asserts success (crashes on error). Both covered with examples. |
+| 80 | **Custom Error Types** | ✅ | Define your own error types with `enum ParseError: Error { case notNumber }` for descriptive, typed errors. |
 | 81 | **`Result` Type** | 🔲 | `Result<Success, Failure>` — encapsulates either a success value or an error. Great for async code. |
+
+**📂 Your code:**
+- [Async.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Async/Async.swift) — `throws`, `throw`, `do-try-catch`, `try?`, custom `Error` enum
+- 📖 [Async.md](file:///d:/Workspace/Desktop/Learning%20Swift/Async/Async.md) — **Complete reading guide for error handling & async**
 
 ---
 
@@ -223,11 +231,15 @@
 
 | # | Topic | Status | Description |
 |---|-------|--------|-------------|
-| 86 | **`async` / `await`** | 🔲 | Write asynchronous code that reads like synchronous code. No more nested callbacks. |
-| 87 | **`Task` & `TaskGroup`** | 🔲 | Structured concurrency — spawn concurrent work and manage its lifecycle. |
+| 86 | **`async` / `await`** | ✅ | Write asynchronous code that reads like synchronous code. `func fetchData() async -> Int`. |
+| 87 | **`Task` & `TaskGroup`** | ✅ | `Task { }` creates async contexts. `Task.sleep(for:)`, `.cancel()`, `.isCancelled`, `.value`. |
 | 88 | **Actors** | 🔲 | Reference types that protect their mutable state from data races. Thread-safe by design. |
 | 89 | **`@Sendable` & Data Race Safety** | 🔲 | Compiler-enforced thread safety. Mark closures and types that are safe to pass across concurrency boundaries. |
 | 90 | **`MainActor`** | 🔲 | Ensures code runs on the main thread — essential for UI updates. |
+
+**📂 Your code:**
+- [Async.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Async/Async.swift) — `async`/`await`, `Task`, `Task.sleep(for:)`, `RunLoop.main.run()`
+- 📖 [Async.md](file:///d:/Workspace/Desktop/Learning%20Swift/Async/Async.md) — **Complete Task methods & properties reference**
 
 ---
 
@@ -237,12 +249,18 @@
 
 | # | Topic | Status | Description |
 |---|-------|--------|-------------|
-| 91 | **Extensions** | 🔲 | Add new methods, computed properties, and protocol conformances to *any* type — even types you don't own. |
-| 92 | **Subscripts** | 🔲 | Custom index-based access — `myCollection[index]`. Define with the `subscript` keyword. |
-| 93 | **Property Wrappers** | 🔲 | `@Published`, `@State`, `@AppStorage` — encapsulate common property patterns behind a reusable wrapper. |
+| 91 | **Extensions** | ✅ | Add new methods to existing types — `extension Circle { func area() -> Double { } }`. Used to extend `Circle` struct. |
+| 92 | **Subscripts** | ✅ | Custom `[]` access — `subscript(index: Int) -> String`. Used for Week days and Matrix grid. |
+| 93 | **Property Wrappers** | ✅ | `@Published` — notifies subscribers when value changes. Used with `ObservableObject` in Combine. |
 | 94 | **Result Builders** | 🔲 | The magic behind SwiftUI's declarative syntax — `@ViewBuilder`, `@resultBuilder`. |
 | 95 | **Keypaths** | 🔲 | Type-safe references to properties — `\Person.name`. Enables powerful functional patterns. |
-| 96 | **Macros** (Swift 5.9+) | 🔲 | Compile-time code generation — `#Predicate`, `@Observable`. A modern metaprogramming tool. |
+| 96 | **Macros** (Swift 5.9+) | ✅ | Compile-time code generation — `@Observable` for automatic property tracking in SwiftUI. |
+
+**📂 Your code:**
+- [Struct_Classes.swift — Extensions](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift#L154-L169) — `extension Circle { func areaOfCircle() }`
+- [Struct_Classes.swift — Subscripts](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift#L63-L119) — Week subscript, Matrix subscript
+- [Macro_and_Observables.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Async/Macro_and_Observables.swift) — `@Observable`, `ObservableObject`, `@Published`, `sink`
+- 📖 [Async.md](file:///d:/Workspace/Desktop/Learning%20Swift/Async/Async.md) — Observables & macros reference
 
 ---
 
@@ -267,18 +285,18 @@
 Level  1  — Language Basics          █████████████████ 12 / 12  🎉 COMPLETE!
 Level  2  — Control Flow             █████████████████ 16 / 16  🎉 COMPLETE!
 Level  3  — Collections              █████████████████ 10 / 10  🎉 COMPLETE!
-Level  4  — Functions & Closures     █████████████████ 12 / 14
-Level  5  — Optionals & Safety       █████░░░░░░░░░░░░  2 / 6
-Level  6  — OOP                      █████████████░░░░  6 / 8
-Level  7  — Protocols & Generics     ░░░░░░░░░░░░░░░░░  0 / 6
+Level  4  — Functions & Closures     ██████████████░░░ 12 / 14
+Level  5  — Optionals & Safety       ███████████░░░░░░  4 / 6
+Level  6  — OOP                      ███████████████░░  7 / 8
+Level  7  — Protocols & Generics     ███░░░░░░░░░░░░░░  1 / 6
 Level  8  — Enums & Pattern Matching █████████████████  4 / 4   🎉 COMPLETE!
-Level  9  — Error Handling           ░░░░░░░░░░░░░░░░░  0 / 5
+Level  9  — Error Handling           ██████████████░░░  4 / 5
 Level 10  — Memory Management        ░░░░░░░░░░░░░░░░░  0 / 4
-Level 11  — Concurrency              ░░░░░░░░░░░░░░░░░  0 / 5
-Level 12  — Advanced Swift           ░░░░░░░░░░░░░░░░░  0 / 6
+Level 11  — Concurrency              ███████░░░░░░░░░░  2 / 5
+Level 12  — Advanced Swift           ███████████░░░░░░  4 / 6
 Level 13  — Ecosystem & Tooling      ░░░░░░░░░░░░░░░░░  0 / 6
 ─────────────────────────────────────────────────────────────
-Total                                                 62 / 102
+Total                                                 76 / 102
 ```
 
 ---
@@ -304,9 +322,13 @@ Learning Swift/
 │   ├── 📖 Functions.md
 │   └── functions.swift
 ├── Objects/
-│   ├── 📖 Objects.md               ← Complete guide: Structs, Classes, Enums
+│   ├── 📖 Objects.md               ← Structs, Classes, Enums, Generics, Access Modifiers
 │   ├── Struct_Classes.swift
 │   └── Enums.swift
+├── Async/
+│   ├── 📖 Async.md                 ← Error handling, async/await, Task reference, Observables
+│   ├── Async.swift
+│   └── Macro_and_Observables.swift
 └── Error Screenshots/
     ├── 📖 Error Screenshots.md
     └── let(Constant)_Cannot_Changed.png
