@@ -41,6 +41,68 @@ var fruits = ["Apple", "Banana", "Mango"]
 var emptyArr: [String] = []
 ```
 
+### 🔹 `Array()` Constructors — Complete Reference
+
+Beyond literal syntax `[1, 2, 3]`, Swift provides several `Array()` initializers to create arrays programmatically:
+
+| Constructor | What It Does | Example | Result |
+|-------------|-------------|---------|--------|
+| `Array()` | Creates an empty array | `Array<Int>()` | `[]` |
+| `[Type]()` | Shorthand for empty array | `[Int]()` | `[]` |
+| `Array(repeating:count:)` | Creates array with N copies of a value | `Array(repeating: 0, count: 5)` | `[0, 0, 0, 0, 0]` |
+| `Array(_:)` (from Sequence) | Creates array from any sequence | `Array(1...5)` | `[1, 2, 3, 4, 5]` |
+| `Array(_:)` (from Set) | Creates array from a set | `Array(mySet)` | `[5, 2, 6, 0]` |
+| `Array(_:)` (from String) | Creates array of characters | `Array("Swift")` | `["S", "w", "i", "f", "t"]` |
+| `Array(_:)` (from Dictionary keys) | Extracts keys as array | `Array(dict.keys)` | `["name", "age"]` |
+| `Array(_:)` (from Dictionary values) | Extracts values as array | `Array(dict.values)` | `[55, 75]` |
+| `Array(repeating:count:)` + 2D | Creates a 2D grid (matrix) | `Array(repeating: Array(repeating: 0, count: 3), count: 2)` | `[[0,0,0], [0,0,0]]` |
+
+#### Code Examples
+
+```swift
+// 1. Empty array using Array()
+var empty1 = Array<String>()        // []
+var empty2 = [String]()             // [] (shorthand — same thing)
+
+// 2. Array with repeated values
+var zeros = Array(repeating: 0, count: 5)          // [0, 0, 0, 0, 0]
+var bools = Array(repeating: false, count: 3)      // [false, false, false]
+var greet = Array(repeating: "Hi", count: 4)       // ["Hi", "Hi", "Hi", "Hi"]
+
+// 3. Array from a Range (Sequence)
+var range1 = Array(1...5)            // [1, 2, 3, 4, 5]
+var range2 = Array(0..<10)           // [0, 1, 2, ..., 9]
+var strided = Array(stride(from: 0, to: 10, by: 2))  // [0, 2, 4, 6, 8]
+
+// 4. Array from a String (each character becomes an element)
+var chars = Array("Swift")           // ["S", "w", "i", "f", "t"]
+
+// 5. Array from a Set (order not guaranteed)
+let mySet: Set<Int> = [5, 2, 6]
+var fromSet = Array(mySet)           // [5, 2, 6] (order varies)
+
+// 6. Array from Dictionary keys/values
+let dict = ["name": "Sonu", "city": "Delhi"]
+var keys = Array(dict.keys)          // ["name", "city"]
+var vals = Array(dict.values)        // ["Sonu", "Delhi"]
+
+// 7. 2D Array (Matrix) using nested repeating
+var matrix = Array(repeating: Array(repeating: 0, count: 4), count: 3)
+// [[0,0,0,0], [0,0,0,0], [0,0,0,0]]  — 3 rows × 4 columns
+
+// 8. Array from reversed/sorted sequence
+var reversed = Array((1...5).reversed())    // [5, 4, 3, 2, 1]
+var sorted = Array([3, 1, 2].sorted())     // [1, 2, 3]
+
+// 9. Array from enumerated (index, value pairs)
+var indexed = Array([10, 20, 30].enumerated())
+// [(offset: 0, element: 10), (offset: 1, element: 20), (offset: 2, element: 30)]
+```
+
+> 💡 **`Array(repeating: 0, count: rows * columns)`** is used in your [Matrix subscript example](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift#L109) to initialize a flat 1D array for a 2D grid!
+
+> ⚠️ **2D Array gotcha:** `Array(repeating: Array(repeating: 0, count: 3), count: 2)` is safe for value types like `Int`. For reference types, all inner arrays are the **same reference** — use a loop instead.
+
 ### 🔹 Array Properties — Complete Reference
 
 | Property | What It Does | Returns | Example | Output |

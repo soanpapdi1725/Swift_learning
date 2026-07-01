@@ -79,6 +79,7 @@
 |---|-------|--------|-------------|
 | 29 | **Arrays** | ✅ | Ordered collections — `let fruits = ["Apple", "Banana", "Mango"]`. Properties, methods, and higher-order functions. |
 | 30 | **Array Properties & Methods** | ✅ | `.count`, `.isEmpty`, `.first`, `.last`, `.append()`, `.insert()`, `.remove()`, `.contains()`, `.swapAt()`, `.min()`, `.max()` |
+| 30b | **`Array()` Constructors** | ✅ | `Array()`, `Array(repeating:count:)`, `Array(1...5)`, `Array("Swift")`, `Array(dict.keys)`, 2D arrays — all initializer forms. |
 | 31 | **Higher-Order Functions (`map`, `filter`, `reduce`)** | ✅ | `map` transforms every element, `filter` keeps matching elements, `reduce` combines all into one value. Supports `$0` shorthand. |
 | 32 | **`joined(separator:)`** | ✅ | Combine array into a string. Use `map(String.init)` to convert `[Int]` → `[String]` first. |
 | 33 | **Sorting & Reordering** | ✅ | `sort()` vs `sorted()`, `reverse()` vs `reversed()`, `shuffle()` vs `shuffled()` — mutating vs non-mutating. |
@@ -87,6 +88,7 @@
 | 36 | **Sets** | ✅ | Unordered collections of unique values. Duplicates automatically removed. `.contains()` for membership testing. |
 | 37 | **Tuples** | ✅ | Used in function return values — `(min: Int, max: Int)` — and `switch` tuple matching. |
 | 38 | **Collection Operations** | 🔲 | `compactMap`, `flatMap` — remaining functional programming essentials. |
+| 38b | **`Array()` Constructors** | ✅ | `Array()`, `Array(repeating:count:)`, `Array(1...5)`, `Array("Swift")`, `Array(dict.keys)`, 2D array initialization. |
 
 **📂 Your code:**
 - [Arrays.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Collections/Arrays.swift) — Array properties, methods, map, filter, joined
@@ -144,17 +146,19 @@
 
 | # | Topic | Status | Description |
 |---|-------|--------|-------------|
-| 59 | **Structs** | 🔲 | Value types — copied on assignment. Preferred for most data models in Swift. |
-| 60 | **Classes** | 🔲 | Reference types — shared on assignment. Needed for inheritance and identity. |
-| 61 | **Structs vs Classes** | 🔲 | Key differences: value vs reference semantics, inheritance, deinitializers, ARC behavior. |
+| 59 | **Structs** | ✅ | Value types — copied on assignment. Memberwise init, `mutating` methods, `static` members, subscripts. |
+| 60 | **Classes** | ✅ | Reference types — shared on assignment. `init`, `deinit`, optional chaining, method overloading. |
+| 61 | **Structs vs Classes** | ✅ | Key differences: value vs reference semantics, inheritance, deinitializers, memory (stack vs heap). |
 | 62 | **Properties (Stored & Computed)** | 🔲 | Stored: hold a value. Computed: calculate a value on the fly. Also: `lazy`, `willSet`, `didSet`. |
-| 63 | **Methods** | 🔲 | Instance and type methods. Use `mutating` for methods that modify struct properties. |
-| 64 | **Initializers** | 🔲 | `init()` methods to set up instances. Supports default, custom, failable (`init?`), and required initializers. |
-| 65 | **Inheritance** | 🔲 | Class-only feature. Use `override` for customization, `final` to prevent subclassing. |
+| 63 | **Methods** | ✅ | Instance and type (`static`) methods. `mutating` for struct methods, method overloading in classes. |
+| 64 | **Initializers** | ✅ | Designated `init()`, `convenience init`, failable `init?`, `deinit` — all covered with examples. |
+| 65 | **Inheritance** | ✅ | `override`, `super`, `final`, type checking with `is`, type casting with `as?`. Multi-level inheritance chain. |
 | 66 | **Access Control** | 🔲 | `public`, `internal`, `fileprivate`, `private` — control what's visible to other code. |
 
 **📂 Your code:**
-- 📖 [Objects.md](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Objects.md) — **Preview and roadmap for this level**
+- [Struct_Classes.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Struct_Classes.swift) — Structs (value types, `mutating`, `static`, subscripts, Matrix), Classes (reference types, init, inheritance, `override`, `final`, `deinit`, optional chaining, method overloading)
+- [Enums.swift](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Enums.swift) — Enumerations — basic, raw values, associated values, methods
+- 📖 [Objects.md](file:///d:/Workspace/Desktop/Learning%20Swift/Objects/Objects.md) — **Complete reading guide for this level**
 
 ---
 
@@ -180,8 +184,8 @@
 | # | Topic | Status | Description |
 |---|-------|--------|-------------|
 | 73 | **Basic Enums** | ✅ | Define a group of related values — `enum Direction { case north, south, east, west }`. Used with `switch`. |
-| 74 | **Raw Values** | 🔲 | Back enums with a type — `enum Planet: Int { case mercury = 1, venus, earth }`. |
-| 75 | **Associated Values** | 🔲 | Attach data to cases — `case success(Data)`, `case failure(Error)`. Makes enums incredibly expressive. |
+| 74 | **Raw Values** | ✅ | Back enums with a type — `enum Week: String { case monday = "Monday" }`. Access with `.rawValue`, create with `init(rawValue:)`. |
+| 75 | **Associated Values** | ✅ | Attach data to cases — `case success(data: String)`, `case failed(error: String)`. Used for API response handling. |
 | 76 | **Pattern Matching (`switch` + `case let`)** | ✅ | Value binding with `case let x where` — used for temperature ranges and quadrant detection. |
 
 ---
@@ -262,19 +266,19 @@
 ```
 Level  1  — Language Basics          █████████████████ 12 / 12  🎉 COMPLETE!
 Level  2  — Control Flow             █████████████████ 16 / 16  🎉 COMPLETE!
-Level  3  — Collections              ████████████████░  9 / 10
+Level  3  — Collections              █████████████████ 10 / 10  🎉 COMPLETE!
 Level  4  — Functions & Closures     █████████████████ 12 / 14
 Level  5  — Optionals & Safety       █████░░░░░░░░░░░░  2 / 6
-Level  6  — OOP                      ░░░░░░░░░░░░░░░░░  0 / 8
+Level  6  — OOP                      █████████████░░░░  6 / 8
 Level  7  — Protocols & Generics     ░░░░░░░░░░░░░░░░░  0 / 6
-Level  8  — Enums & Pattern Matching ███████████░░░░░░  2 / 4
+Level  8  — Enums & Pattern Matching █████████████████  4 / 4   🎉 COMPLETE!
 Level  9  — Error Handling           ░░░░░░░░░░░░░░░░░  0 / 5
 Level 10  — Memory Management        ░░░░░░░░░░░░░░░░░  0 / 4
 Level 11  — Concurrency              ░░░░░░░░░░░░░░░░░  0 / 5
 Level 12  — Advanced Swift           ░░░░░░░░░░░░░░░░░  0 / 6
 Level 13  — Ecosystem & Tooling      ░░░░░░░░░░░░░░░░░  0 / 6
 ─────────────────────────────────────────────────────────────
-Total                                                 53 / 102
+Total                                                 62 / 102
 ```
 
 ---
@@ -289,7 +293,7 @@ Learning Swift/
 │   ├── Basics.swift
 │   └── Types.swift
 ├── Collections/
-│   ├── 📖 Collections.md           ← Full properties & methods tables
+│   ├── 📖 Collections.md           ← Full properties & methods tables + Array() constructors
 │   ├── Arrays.swift
 │   ├── String.swift
 │   └── Sets_and_Dict.Swift
@@ -300,7 +304,9 @@ Learning Swift/
 │   ├── 📖 Functions.md
 │   └── functions.swift
 ├── Objects/
-│   └── 📖 Objects.md               ← Ready for your next module
+│   ├── 📖 Objects.md               ← Complete guide: Structs, Classes, Enums
+│   ├── Struct_Classes.swift
+│   └── Enums.swift
 └── Error Screenshots/
     ├── 📖 Error Screenshots.md
     └── let(Constant)_Cannot_Changed.png
